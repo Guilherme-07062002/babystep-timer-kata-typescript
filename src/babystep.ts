@@ -72,6 +72,16 @@ function stopTimer(): void {
   );
 }
 
+function resetTimer(): void {
+  _currentCycleStartTime = Date.now();
+  _bodyBackgroundColor = BackgroundColorPassed;
+}
+
+function quitTimer(): void {
+  document.body.innerHTML = "";
+  clearInterval(_threadTimer);
+}
+
 export function command(arg: string): void {
   let args = {
     Url: {
@@ -84,11 +94,9 @@ export function command(arg: string): void {
   } else if (args.Url.AbsoluteUri == "command://stop/") {
     stopTimer();
   } else if (args.Url.AbsoluteUri == "command://reset/") {
-    _currentCycleStartTime = Date.now();
-    _bodyBackgroundColor = BackgroundColorPassed;
+    resetTimer();
   } else if (args.Url.AbsoluteUri == "command://quit/") {
-    document.body.innerHTML = "";
-    clearInterval(_threadTimer);
+    quitTimer();
   }
 }
 
