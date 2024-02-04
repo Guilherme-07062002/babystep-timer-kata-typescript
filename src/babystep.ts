@@ -15,54 +15,62 @@ document.body.innerHTML = CreateTimerHtml(
   false
 );
 
-export function command(arg: string): void {
-  let args = { Url: { AbsoluteUri: `command://${arg}/` } };
-  console.log("called", arg, args.Url.AbsoluteUri);
-  if (args.Url.AbsoluteUri == "command://start/") {
-    document.body.innerHTML = CreateTimerHtml(
-      getRemainingTimeCaption(0),
-      BackgroundColorNeutral,
-      true
-    );
+function startTimer(): void {
+  document.body.innerHTML = CreateTimerHtml(
+    getRemainingTimeCaption(0),
+    BackgroundColorNeutral,
+    true
+  );
 
-    _timerRunning = true;
-    _currentCycleStartTime = Date.now();
+  _timerRunning = true;
+  _currentCycleStartTime = Date.now();
 
-    _threadTimer = setInterval(function () {
-      if (_timerRunning) {
-        let elapsedTime: number = Date.now() - _currentCycleStartTime;
+  _threadTimer = setInterval(function () {
+    if (_timerRunning) {
+      let elapsedTime: number = Date.now() - _currentCycleStartTime;
 
-        if (elapsedTime >= SecondsInCycle * 1000 + 980) {
-          _currentCycleStartTime = Date.now();
-          elapsedTime = Date.now() - _currentCycleStartTime;
-        }
-        if (
-          elapsedTime >= 5000 &&
-          elapsedTime < 6000 &&
-          _bodyBackgroundColor != BackgroundColorNeutral
-        ) {
-          _bodyBackgroundColor = BackgroundColorNeutral;
-        }
-
-        let remainingTime: string = getRemainingTimeCaption(elapsedTime);
-
-        if (_lastRemainingTime !== remainingTime) {
-          if (remainingTime == "00:10") {
-            playSound("2166__suburban-grilla__bowl-struck.wav");
-          } else if (remainingTime == "00:00") {
-            playSound("32304__acclivity__shipsbell.wav");
-            _bodyBackgroundColor = BackgroundColorFailed;
-          }
-
-          document.body.innerHTML = CreateTimerHtml(
-            remainingTime,
-            _bodyBackgroundColor,
-            true
-          );
-          _lastRemainingTime = remainingTime;
-        }
+      if (elapsedTime >= SecondsInCycle * 1000 + 980) {
+        _currentCycleStartTime = Date.now();
+        elapsedTime = Date.now() - _currentCycleStartTime;
       }
-    }, 10);
+      if (
+        elapsedTime >= 5000 &&
+        elapsedTime < 6000 &&
+        _bodyBackgroundColor != BackgroundColorNeutral
+      ) {
+        _bodyBackgroundColor = BackgroundColorNeutral;
+      }
+
+      let remainingTime: string = getRemainingTimeCaption(elapsedTime);
+
+      if (_lastRemainingTime !== remainingTime) {
+        if (remainingTime == "00:10") {
+          playSound("2166__suburban-grilla__bowl-struck.wav");
+        } else if (remainingTime == "00:00") {
+          playSound("32304__acclivity__shipsbell.wav");
+          _bodyBackgroundColor = BackgroundColorFailed;
+        }
+
+        document.body.innerHTML = CreateTimerHtml(
+          remainingTime,
+          _bodyBackgroundColor,
+          true
+        );
+        _lastRemainingTime = remainingTime;
+      }
+    }
+  }, 10);
+}
+
+export function command(arg: string): void {
+  let args = {
+    Url: {
+      AbsoluteUri: `command://${arg}/`,
+    },
+  };
+
+  if (args.Url.AbsoluteUri == "command://start/") {
+    startTimer();
   } else if (args.Url.AbsoluteUri == "command://stop/") {
     _timerRunning = false;
     clearInterval(_threadTimer);
@@ -81,7 +89,7 @@ export function command(arg: string): void {
 }
 
 export function getRemainingTimeCaption(elapsedTime: number): string {
-  let remainingTime: Date = new Date(SecondsInCycle * 1000 - elapsedTime);
+  const remainingTime: Date = new Date(SecondsInCycle * 1000 - elapsedTime);
   var minute: string | number = remainingTime.getMinutes();
   var second: string | number = remainingTime.getSeconds();
   if (minute < 10) {
