@@ -21,4 +21,6 @@ describe("A new babysteps timer", function () {
     timer.testStopTimer();
     assert.equal(false, timer.isTimerRunning());
   });
+
+  // ... more tests
 });
