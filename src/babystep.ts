@@ -124,26 +124,17 @@ class Timer {
     bodyColor: string,
     running: boolean
   ): string {
-    let timerHtml: string =
-      '<div style="border: 3px solid #555555; background: ' +
-      bodyColor +
-      '; margin: 0; padding: 0;">' +
-      '<h1 style="text-align: center; font-size: 30px; color: #333333;">' +
-      timerText +
-      "</h1>" +
-      '<div style="text-align: center">';
-    if (running) {
-      timerHtml +=
-        '<a style="color: #555555;" href="javascript:command(\'stop\');">Stop</a> ' +
-        '<a style="color: #555555;" href="javascript:command(\'reset\');">Reset</a> ';
-    } else {
-      timerHtml +=
-        '<a style="color: #555555;" href="javascript:command(\'start\');">Start</a> ';
-    }
-    timerHtml +=
-      '<a style="color: #555555;" href="javascript:command(\'quit\');">Quit</a> ';
-    timerHtml += "</div></div>";
-    return timerHtml;
+    const timerHtml: string =
+      `<div style="border: 3px solid #555555; background: ${bodyColor}; margin: 0; padding: 0;">` +
+      `<h1 style="text-align: center; font-size: 30px; color: #333333;">${timerText}</h1>` +
+      `<div style="text-align: center">
+      ${
+        running
+          ? `<a style="color: #555555;" href="javascript:command('stop');">Stop</a> <a style="color: #555555;" href="javascript:command('reset');">Reset</a> `
+          : '<a style="color: #555555;" href="javascript:command(\'start\');">Start</a>'
+      }` +
+      `<a style="color: #555555;" href="javascript:command('quit');">Quit</a> </div></div>`;
+    return timerHtml.replace(/\s+/g, " ").trim();
   }
 
   protected playSound(url: string): void {
