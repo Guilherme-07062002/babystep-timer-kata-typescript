@@ -1,151 +1,159 @@
-const BackgroundColorNeutral: string = "#ffffff";
-const BackgroundColorFailed: string = "#ffcccc";
-const BackgroundColorPassed: string = "#ccffcc";
-const SecondsInCycle: number = 120;
+class Timer {
+  BackgroundColorNeutral: string = "#ffffff";
+  BackgroundColorFailed: string = "#ffcccc";
+  BackgroundColorPassed: string = "#ccffcc";
+  SecondsInCycle: number = 120;
 
-let _timerRunning: boolean;
-let _currentCycleStartTime: number;
-let _lastRemainingTime: string;
-let _bodyBackgroundColor: string = BackgroundColorNeutral;
-let _threadTimer: NodeJS.Timeout;
+  _timerRunning: boolean = false;
+  _currentCycleStartTime: number = 0;
+  _lastRemainingTime: string = "00:00";
+  _bodyBackgroundColor: string = this.BackgroundColorNeutral;
+  _threadTimer: NodeJS.Timeout | number = 0;
+  constructor() {
+    this.generateTimer();
+  }
+  protected generateTimer() {
+    document.body.innerHTML = this.CreateTimerHtml(
+      this.getRemainingTimeCaption(0),
+      this.BackgroundColorNeutral,
+      false
+    );
+  }
 
-document.body.innerHTML = CreateTimerHtml(
-  getRemainingTimeCaption(0),
-  BackgroundColorNeutral,
-  false
-);
+  protected startTimer(): void {
+    document.body.innerHTML = this.CreateTimerHtml(
+      this.getRemainingTimeCaption(0),
+      this.BackgroundColorNeutral,
+      true
+    );
 
-function startTimer(): void {
-  document.body.innerHTML = CreateTimerHtml(
-    getRemainingTimeCaption(0),
-    BackgroundColorNeutral,
-    true
-  );
+    this._timerRunning = true;
+    this._currentCycleStartTime = Date.now();
 
-  _timerRunning = true;
-  _currentCycleStartTime = Date.now();
+    this._threadTimer = setInterval(() => {
+      if (this._timerRunning) {
+        let elapsedTime: number = Date.now() - this._currentCycleStartTime;
 
-  _threadTimer = setInterval(function () {
-    if (_timerRunning) {
-      let elapsedTime: number = Date.now() - _currentCycleStartTime;
-
-      if (elapsedTime >= SecondsInCycle * 1000 + 980) {
-        _currentCycleStartTime = Date.now();
-        elapsedTime = Date.now() - _currentCycleStartTime;
-      }
-      if (
-        elapsedTime >= 5000 &&
-        elapsedTime < 6000 &&
-        _bodyBackgroundColor != BackgroundColorNeutral
-      ) {
-        _bodyBackgroundColor = BackgroundColorNeutral;
-      }
-
-      let remainingTime: string = getRemainingTimeCaption(elapsedTime);
-
-      if (_lastRemainingTime !== remainingTime) {
-        if (remainingTime == "00:10") {
-          playSound("2166__suburban-grilla__bowl-struck.wav");
-        } else if (remainingTime == "00:00") {
-          playSound("32304__acclivity__shipsbell.wav");
-          _bodyBackgroundColor = BackgroundColorFailed;
+        if (elapsedTime >= this.SecondsInCycle * 1000 + 980) {
+          this._currentCycleStartTime = Date.now();
+          elapsedTime = Date.now() - this._currentCycleStartTime;
+        }
+        if (
+          elapsedTime >= 5000 &&
+          elapsedTime < 6000 &&
+          this._bodyBackgroundColor != this.BackgroundColorNeutral
+        ) {
+          this._bodyBackgroundColor = this.BackgroundColorNeutral;
         }
 
-        document.body.innerHTML = CreateTimerHtml(
-          remainingTime,
-          _bodyBackgroundColor,
-          true
-        );
-        _lastRemainingTime = remainingTime;
+        let remainingTime: string = this.getRemainingTimeCaption(elapsedTime);
+
+        if (this._lastRemainingTime !== remainingTime) {
+          if (remainingTime == "00:10") {
+            this.playSound("2166__suburban-grilla__bowl-struck.wav");
+          } else if (remainingTime == "00:00") {
+            this.playSound("32304__acclivity__shipsbell.wav");
+            this._bodyBackgroundColor = this.BackgroundColorFailed;
+          }
+
+          document.body.innerHTML = this.CreateTimerHtml(
+            remainingTime,
+            this._bodyBackgroundColor,
+            true
+          );
+          this._lastRemainingTime = remainingTime;
+        }
       }
+    }, 10);
+  }
+  protected stopTimer(): void {
+    this._timerRunning = false;
+    clearInterval(this._threadTimer);
+    document.body.innerHTML = this.CreateTimerHtml(
+      this.getRemainingTimeCaption(0),
+      this.BackgroundColorNeutral,
+      false
+    );
+  }
+
+  protected resetTimer(): void {
+    this._currentCycleStartTime = Date.now();
+    this._bodyBackgroundColor = this.BackgroundColorPassed;
+  }
+
+  protected quitTimer(): void {
+    document.body.innerHTML = "";
+    clearInterval(this._threadTimer);
+  }
+  public command(arg: string): void {
+    switch (arg) {
+      case "start":
+        this.startTimer();
+        break;
+      case "stop":
+        this.stopTimer();
+        break;
+      case "reset":
+        this.resetTimer();
+        break;
+      case "quit":
+        this.quitTimer();
+        break;
+      default:
+        break;
     }
-  }, 10);
-}
-
-function stopTimer(): void {
-  _timerRunning = false;
-  clearInterval(_threadTimer);
-  document.body.innerHTML = CreateTimerHtml(
-    getRemainingTimeCaption(0),
-    BackgroundColorNeutral,
-    false
-  );
-}
-
-function resetTimer(): void {
-  _currentCycleStartTime = Date.now();
-  _bodyBackgroundColor = BackgroundColorPassed;
-}
-
-function quitTimer(): void {
-  document.body.innerHTML = "";
-  clearInterval(_threadTimer);
-}
-
-export function command(arg: string): void {
-  switch (arg) {
-    case "start":
-      startTimer();
-      break;
-    case "stop":
-      stopTimer();
-      break;
-    case "reset":
-      resetTimer();
-      break;
-    case "quit":
-      quitTimer();
-      break;
-    default:
-      break;
   }
-}
+  protected getRemainingTimeCaption(elapsedTime: number): string {
+    const remainingTime: Date = new Date(
+      this.SecondsInCycle * 1000 - elapsedTime
+    );
+    var minute: string | number = remainingTime.getMinutes();
+    var second: string | number = remainingTime.getSeconds();
+    if (minute < 10) {
+      minute = "0" + minute;
+    }
+    if (second < 10) {
+      second = "0" + second;
+    }
 
-export function getRemainingTimeCaption(elapsedTime: number): string {
-  const remainingTime: Date = new Date(SecondsInCycle * 1000 - elapsedTime);
-  var minute: string | number = remainingTime.getMinutes();
-  var second: string | number = remainingTime.getSeconds();
-  if (minute < 10) {
-    minute = "0" + minute;
-  }
-  if (second < 10) {
-    second = "0" + second;
+    return "" + minute + ":" + second;
   }
 
-  return "" + minute + ":" + second;
-}
-
-export function CreateTimerHtml(
-  timerText: string,
-  bodyColor: string,
-  running: boolean
-): string {
-  let timerHtml: string =
-    '<div style="border: 3px solid #555555; background: ' +
-    bodyColor +
-    '; margin: 0; padding: 0;">' +
-    '<h1 style="text-align: center; font-size: 30px; color: #333333;">' +
-    timerText +
-    "</h1>" +
-    '<div style="text-align: center">';
-  if (running) {
+  public CreateTimerHtml(
+    timerText: string,
+    bodyColor: string,
+    running: boolean
+  ): string {
+    let timerHtml: string =
+      '<div style="border: 3px solid #555555; background: ' +
+      bodyColor +
+      '; margin: 0; padding: 0;">' +
+      '<h1 style="text-align: center; font-size: 30px; color: #333333;">' +
+      timerText +
+      "</h1>" +
+      '<div style="text-align: center">';
+    if (running) {
+      timerHtml +=
+        '<a style="color: #555555;" href="javascript:command(\'stop\');">Stop</a> ' +
+        '<a style="color: #555555;" href="javascript:command(\'reset\');">Reset</a> ';
+    } else {
+      timerHtml +=
+        '<a style="color: #555555;" href="javascript:command(\'start\');">Start</a> ';
+    }
     timerHtml +=
-      '<a style="color: #555555;" href="javascript:command(\'stop\');">Stop</a> ' +
-      '<a style="color: #555555;" href="javascript:command(\'reset\');">Reset</a> ';
-  } else {
-    timerHtml +=
-      '<a style="color: #555555;" href="javascript:command(\'start\');">Start</a> ';
+      '<a style="color: #555555;" href="javascript:command(\'quit\');">Quit</a> ';
+    timerHtml += "</div></div>";
+    return timerHtml;
   }
-  timerHtml +=
-    '<a style="color: #555555;" href="javascript:command(\'quit\');">Quit</a> ';
-  timerHtml += "</div></div>";
-  return timerHtml;
+
+  protected playSound(url: string): void {
+    let audio = new Audio();
+    audio.src = `./src/sounds/${url}`;
+    console.log(audio.src);
+    audio.load();
+    audio.play();
+  }
 }
 
-function playSound(url: string): void {
-  let audio = new Audio();
-  audio.src = `./src/sounds/${url}`;
-  console.log(audio.src);
-  audio.load();
-  audio.play();
-}
+const timer = new Timer();
+export { timer };
