@@ -1,4 +1,4 @@
-class Timer {
+export class Timer {
   protected BackgroundColorNeutral: string = "#ffffff";
   protected BackgroundColorFailed: string = "#ffcccc";
   protected BackgroundColorPassed: string = "#ccffcc";
@@ -15,24 +15,25 @@ class Timer {
     this.generateTimer();
   }
 
-  public command(arg: string): void {
+  public command = (arg: string): void => {
+    var self = this;
     switch (arg) {
       case "start":
-        this.startTimer();
+        () => self.startTimer.bind(this);
         break;
       case "stop":
-        this.stopTimer();
+        self.stopTimer();
         break;
       case "reset":
-        this.resetTimer();
+        self.resetTimer();
         break;
       case "quit":
-        this.quitTimer();
+        self.quitTimer();
         break;
       default:
         break;
     }
-  }
+  };
 
   protected generateTimer(isRunning: boolean = false): void {
     document.body.innerHTML = this.CreateTimerHtml(
@@ -79,14 +80,14 @@ class Timer {
     return result;
   }
 
-  protected startTimer(): void {
+  protected startTimer = (): void => {
     const elapsedTime: number = this.getElapsedTime();
 
     this.generateTimer(true);
     this.timerRunning = true;
     this.currentCycleStartTime = Date.now();
     this.threadTimer = this.getThreadTimer(elapsedTime);
-  }
+  };
 
   protected stopTimer(): void {
     this.timerRunning = false;
@@ -119,7 +120,7 @@ class Timer {
     return `${formattedMinutes}:${formattedSeconds}`;
   }
 
-  public CreateTimerHtml(
+  protected CreateTimerHtml(
     timerText: string,
     bodyColor: string,
     running: boolean
