@@ -138,9 +138,8 @@ class Timer {
   }
 
   protected playSound(url: string): void {
-    let audio = new Audio();
+    const audio = new Audio();
     audio.src = `./src/sounds/${url}`;
-    console.log(audio.src);
     audio.load();
     audio.play();
   }
