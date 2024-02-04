@@ -13,21 +13,17 @@ class Timer {
   constructor() {
     this.generateTimer();
   }
-  protected generateTimer() {
+
+  protected generateTimer(isRunning: boolean = false): void {
     document.body.innerHTML = this.CreateTimerHtml(
       this.getRemainingTimeCaption(0),
       this.BackgroundColorNeutral,
-      false
+      isRunning
     );
   }
 
   protected startTimer(): void {
-    document.body.innerHTML = this.CreateTimerHtml(
-      this.getRemainingTimeCaption(0),
-      this.BackgroundColorNeutral,
-      true
-    );
-
+    this.generateTimer(true);
     this.timerRunning = true;
     this.currentCycleStartTime = Date.now();
 
@@ -57,11 +53,7 @@ class Timer {
             this.bodyBackgroundColor = this.BackgroundColorFailed;
           }
 
-          document.body.innerHTML = this.CreateTimerHtml(
-            remainingTime,
-            this.bodyBackgroundColor,
-            true
-          );
+          this.generateTimer(true);
           this.lastRemainingTime = remainingTime;
         }
       }
@@ -70,11 +62,7 @@ class Timer {
   protected stopTimer(): void {
     this.timerRunning = false;
     clearInterval(this.threadTimer);
-    document.body.innerHTML = this.CreateTimerHtml(
-      this.getRemainingTimeCaption(0),
-      this.BackgroundColorNeutral,
-      false
-    );
+    this.generateTimer();
   }
 
   protected resetTimer(): void {
