@@ -1,25 +1,5 @@
-"use strict";
-
+import { TestableTimer } from "./factory/testable-timer";
 import { assert } from "chai";
-import { Timer } from "../src/babystep";
-
-class TestableTimer extends Timer {
-  public testCreateTimerHtml() {
-    return this.CreateTimerHtml("Aap", "Noot", true);
-  }
-
-  public testStartTimer() {
-    this.startTimer();
-  }
-
-  public testStopTimer() {
-    this.stopTimer();
-  }
-
-  public isTimerRunning(): boolean {
-    return this.timerRunning;
-  }
-}
 
 describe("A new babysteps timer", function () {
   it("is successfully created", function () {
