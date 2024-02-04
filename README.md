@@ -4,10 +4,10 @@ Baby Steps Timer
 A timer for the "baby steps" exercise/technique for doing TDD. But **actually**, this is some really bad piece of "legacy" code that you can use for refactoring exercises.
 
 [Legacy Code Refactoring at Softwerkskammer Munich](http://www.davidtanzer.net/legacy_code_refactoring_at_softwerkskammer_munich): This blog post describes some exercises I am doing with groups of people using this code.  
-Do you want me to facilitate this exercise at your conference / user group or meetup / your company? Contact me at Business@DavidTanzer.net
+Do you want me to facilitate this exercise at your conference / user group or meetup / your company? Contact me at <Business@DavidTanzer.net>
 
 I love to hear your feedback on Twitter or per email. And if you use this code as a Kata, for yourself or during a meetup, please tell me - I love to hear your experiences! Also, if you have any questions, please contact me:  
-Business@DavidTanzer.net  
+<Business@DavidTanzer.net>  
 [@dtanzer](https://twitter.com/dtanzer)
 
 Contributors
@@ -31,7 +31,7 @@ Want to contribute a language or a new variant/twist to the existing code? Just 
 How it works
 ------------
 
-This is a little timer app you can use for the "Taking baby steps" TDD exercise: http://blog.adrianbolboaca.ro/2013/01/the-history-of-taking-baby-steps/
+This is a little timer app you can use for the "Taking baby steps" TDD exercise: <http://blog.adrianbolboaca.ro/2013/01/the-history-of-taking-baby-steps/>
 
 * You can move the timer window around with your mouse.
 * Once you start the timer, the window stays always on top.
@@ -42,6 +42,7 @@ Refactoring Screen Cast
 -----------------------
 
 I created this project for two reasons:
+
 * To have a baby steps timer.
 * To have some code for a refactoring screen cast (that was actually the real reason).
 
@@ -55,13 +56,14 @@ Acknowledgements
 ----------------
 
 This project uses CC-Licensed sounds from freesound.org:
-* Ships Bell by "acclivity" http://www.freesound.org/people/acclivity/sounds/32304/ http://www.freesound.org/people/acclivity/
-* Bowl Struck by "suburban gorilla" http://www.freesound.org/people/suburban%20grilla/sounds/2166/ http://www.freesound.org/people/suburban%20grilla/
+
+* Ships Bell by "acclivity" <http://www.freesound.org/people/acclivity/sounds/32304/> <http://www.freesound.org/people/acclivity/>
+* Bowl Struck by "suburban gorilla" <http://www.freesound.org/people/suburban%20grilla/sounds/2166/> <http://www.freesound.org/people/suburban%20grilla/>
 
 License
 -------
 
-Copyright 2013 David Tanzer (business@davidtanzer.net, @dtanzer)
+Copyright 2013 David Tanzer (<business@davidtanzer.net>, @dtanzer)
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
