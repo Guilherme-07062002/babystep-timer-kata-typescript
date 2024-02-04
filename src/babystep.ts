@@ -14,6 +14,25 @@ class Timer {
     this.generateTimer();
   }
 
+  public command(arg: string): void {
+    switch (arg) {
+      case "start":
+        this.startTimer();
+        break;
+      case "stop":
+        this.stopTimer();
+        break;
+      case "reset":
+        this.resetTimer();
+        break;
+      case "quit":
+        this.quitTimer();
+        break;
+      default:
+        break;
+    }
+  }
+
   protected generateTimer(isRunning: boolean = false): void {
     document.body.innerHTML = this.CreateTimerHtml(
       this.getRemainingTimeCaption(0),
@@ -74,24 +93,7 @@ class Timer {
     document.body.innerHTML = "";
     clearInterval(this.threadTimer);
   }
-  public command(arg: string): void {
-    switch (arg) {
-      case "start":
-        this.startTimer();
-        break;
-      case "stop":
-        this.stopTimer();
-        break;
-      case "reset":
-        this.resetTimer();
-        break;
-      case "quit":
-        this.quitTimer();
-        break;
-      default:
-        break;
-    }
-  }
+
   protected getRemainingTimeCaption(elapsedTime: number): string {
     const remainingTime: Date = new Date(
       this.SecondsInCycle * 1000 - elapsedTime
