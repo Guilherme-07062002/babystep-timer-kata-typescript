@@ -83,20 +83,21 @@ function quitTimer(): void {
 }
 
 export function command(arg: string): void {
-  let args = {
-    Url: {
-      AbsoluteUri: `command://${arg}/`,
-    },
-  };
-
-  if (args.Url.AbsoluteUri == "command://start/") {
-    startTimer();
-  } else if (args.Url.AbsoluteUri == "command://stop/") {
-    stopTimer();
-  } else if (args.Url.AbsoluteUri == "command://reset/") {
-    resetTimer();
-  } else if (args.Url.AbsoluteUri == "command://quit/") {
-    quitTimer();
+  switch (arg) {
+    case "start":
+      startTimer();
+      break;
+    case "stop":
+      stopTimer();
+      break;
+    case "reset":
+      resetTimer();
+      break;
+    case "quit":
+      quitTimer();
+      break;
+    default:
+      break;
   }
 }
 
