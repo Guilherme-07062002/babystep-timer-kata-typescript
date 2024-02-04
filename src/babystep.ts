@@ -107,16 +107,15 @@ class Timer {
     const remainingTime: Date = new Date(
       this.SecondsInCycle * 1000 - elapsedTime
     );
-    var minute: string | number = remainingTime.getMinutes();
-    var second: string | number = remainingTime.getSeconds();
-    if (minute < 10) {
-      minute = "0" + minute;
-    }
-    if (second < 10) {
-      second = "0" + second;
-    }
+    const remainingMinutes: string | number = remainingTime.getMinutes();
+    const remainingSeconds: string | number = remainingTime.getSeconds();
+    const formattedMinutes =
+      remainingMinutes < 10 ? "0" + remainingMinutes : remainingMinutes;
 
-    return "" + minute + ":" + second;
+    const formattedSeconds =
+      remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds;
+
+    return `${formattedMinutes}:${formattedSeconds}`;
   }
 
   public CreateTimerHtml(
