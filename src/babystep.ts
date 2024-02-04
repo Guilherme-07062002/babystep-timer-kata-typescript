@@ -1,16 +1,17 @@
 class Timer {
-  BackgroundColorNeutral: string = "#ffffff";
-  BackgroundColorFailed: string = "#ffcccc";
-  BackgroundColorPassed: string = "#ccffcc";
-  SecondsInCycle: number = 120;
+  protected BackgroundColorNeutral: string = "#ffffff";
+  protected BackgroundColorFailed: string = "#ffcccc";
+  protected BackgroundColorPassed: string = "#ccffcc";
+  protected bodyBackgroundColor: string = this.BackgroundColorNeutral;
+  protected SecondsInCycle: number = 120;
+  protected timerRunning: boolean;
+  protected currentCycleStartTime: number = Date.now();
+  protected lastRemainingTime: string = "00:00";
+  protected threadTimer: NodeJS.Timeout | number = 0;
 
-  timerRunning: boolean = false;
-  currentCycleStartTime: number = 0;
-  lastRemainingTime: string = "00:00";
-  bodyBackgroundColor: string = this.BackgroundColorNeutral;
-  threadTimer: NodeJS.Timeout | number = 0;
+  constructor(timerRunning: boolean = false) {
+    this.timerRunning = timerRunning;
 
-  constructor() {
     this.generateTimer();
   }
 
@@ -144,5 +145,5 @@ class Timer {
   }
 }
 
-const timer = new Timer();
+const timer = new Timer(true);
 export { timer };
