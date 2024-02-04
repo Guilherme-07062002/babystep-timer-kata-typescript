@@ -41,27 +41,29 @@ class Timer {
     );
   }
 
+  protected getElapsedTime(): number {
+    const elapsedTime: number = Date.now() - this.currentCycleStartTime;
+    if (elapsedTime >= this.SecondsInCycle * 1000 + 980) {
+      this.currentCycleStartTime = Date.now();
+      return Date.now() - this.currentCycleStartTime;
+    }
+    if (
+      elapsedTime >= 5000 &&
+      elapsedTime < 6000 &&
+      this.bodyBackgroundColor != this.BackgroundColorNeutral
+    ) {
+      this.bodyBackgroundColor = this.BackgroundColorNeutral;
+    }
+    return elapsedTime;
+  }
   protected startTimer(): void {
+    const elapsedTime: number = this.getElapsedTime();
+
     this.generateTimer(true);
     this.timerRunning = true;
     this.currentCycleStartTime = Date.now();
-
     this.threadTimer = setInterval(() => {
       if (this.timerRunning) {
-        let elapsedTime: number = Date.now() - this.currentCycleStartTime;
-
-        if (elapsedTime >= this.SecondsInCycle * 1000 + 980) {
-          this.currentCycleStartTime = Date.now();
-          elapsedTime = Date.now() - this.currentCycleStartTime;
-        }
-        if (
-          elapsedTime >= 5000 &&
-          elapsedTime < 6000 &&
-          this.bodyBackgroundColor != this.BackgroundColorNeutral
-        ) {
-          this.bodyBackgroundColor = this.BackgroundColorNeutral;
-        }
-
         let remainingTime: string = this.getRemainingTimeCaption(elapsedTime);
 
         if (this.lastRemainingTime !== remainingTime) {
