@@ -4,11 +4,12 @@ class Timer {
   BackgroundColorPassed: string = "#ccffcc";
   SecondsInCycle: number = 120;
 
-  _timerRunning: boolean = false;
-  _currentCycleStartTime: number = 0;
-  _lastRemainingTime: string = "00:00";
-  _bodyBackgroundColor: string = this.BackgroundColorNeutral;
-  _threadTimer: NodeJS.Timeout | number = 0;
+  timerRunning: boolean = false;
+  currentCycleStartTime: number = 0;
+  lastRemainingTime: string = "00:00";
+  bodyBackgroundColor: string = this.BackgroundColorNeutral;
+  threadTimer: NodeJS.Timeout | number = 0;
+
   constructor() {
     this.generateTimer();
   }
@@ -27,48 +28,48 @@ class Timer {
       true
     );
 
-    this._timerRunning = true;
-    this._currentCycleStartTime = Date.now();
+    this.timerRunning = true;
+    this.currentCycleStartTime = Date.now();
 
-    this._threadTimer = setInterval(() => {
-      if (this._timerRunning) {
-        let elapsedTime: number = Date.now() - this._currentCycleStartTime;
+    this.threadTimer = setInterval(() => {
+      if (this.timerRunning) {
+        let elapsedTime: number = Date.now() - this.currentCycleStartTime;
 
         if (elapsedTime >= this.SecondsInCycle * 1000 + 980) {
-          this._currentCycleStartTime = Date.now();
-          elapsedTime = Date.now() - this._currentCycleStartTime;
+          this.currentCycleStartTime = Date.now();
+          elapsedTime = Date.now() - this.currentCycleStartTime;
         }
         if (
           elapsedTime >= 5000 &&
           elapsedTime < 6000 &&
-          this._bodyBackgroundColor != this.BackgroundColorNeutral
+          this.bodyBackgroundColor != this.BackgroundColorNeutral
         ) {
-          this._bodyBackgroundColor = this.BackgroundColorNeutral;
+          this.bodyBackgroundColor = this.BackgroundColorNeutral;
         }
 
         let remainingTime: string = this.getRemainingTimeCaption(elapsedTime);
 
-        if (this._lastRemainingTime !== remainingTime) {
+        if (this.lastRemainingTime !== remainingTime) {
           if (remainingTime == "00:10") {
             this.playSound("2166__suburban-grilla__bowl-struck.wav");
           } else if (remainingTime == "00:00") {
             this.playSound("32304__acclivity__shipsbell.wav");
-            this._bodyBackgroundColor = this.BackgroundColorFailed;
+            this.bodyBackgroundColor = this.BackgroundColorFailed;
           }
 
           document.body.innerHTML = this.CreateTimerHtml(
             remainingTime,
-            this._bodyBackgroundColor,
+            this.bodyBackgroundColor,
             true
           );
-          this._lastRemainingTime = remainingTime;
+          this.lastRemainingTime = remainingTime;
         }
       }
     }, 10);
   }
   protected stopTimer(): void {
-    this._timerRunning = false;
-    clearInterval(this._threadTimer);
+    this.timerRunning = false;
+    clearInterval(this.threadTimer);
     document.body.innerHTML = this.CreateTimerHtml(
       this.getRemainingTimeCaption(0),
       this.BackgroundColorNeutral,
@@ -77,13 +78,13 @@ class Timer {
   }
 
   protected resetTimer(): void {
-    this._currentCycleStartTime = Date.now();
-    this._bodyBackgroundColor = this.BackgroundColorPassed;
+    this.currentCycleStartTime = Date.now();
+    this.bodyBackgroundColor = this.BackgroundColorPassed;
   }
 
   protected quitTimer(): void {
     document.body.innerHTML = "";
-    clearInterval(this._threadTimer);
+    clearInterval(this.threadTimer);
   }
   public command(arg: string): void {
     switch (arg) {
