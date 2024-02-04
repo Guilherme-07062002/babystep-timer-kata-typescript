@@ -16,19 +16,18 @@ export class Timer {
   }
 
   public command = (arg: string): void => {
-    var self = this;
     switch (arg) {
       case "start":
-        () => self.startTimer.bind(this);
+        this.startTimer();
         break;
       case "stop":
-        self.stopTimer();
+        this.stopTimer();
         break;
       case "reset":
-        self.resetTimer();
+        this.resetTimer();
         break;
       case "quit":
-        self.quitTimer();
+        this.quitTimer();
         break;
       default:
         break;
