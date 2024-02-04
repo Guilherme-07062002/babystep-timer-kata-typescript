@@ -56,13 +56,9 @@ class Timer {
     }
     return elapsedTime;
   }
-  protected startTimer(): void {
-    const elapsedTime: number = this.getElapsedTime();
 
-    this.generateTimer(true);
-    this.timerRunning = true;
-    this.currentCycleStartTime = Date.now();
-    this.threadTimer = setInterval(() => {
+  protected getThreadTimer(elapsedTime: number): NodeJS.Timeout | number {
+    const result = setInterval(() => {
       if (this.timerRunning) {
         let remainingTime: string = this.getRemainingTimeCaption(elapsedTime);
 
@@ -79,7 +75,18 @@ class Timer {
         }
       }
     }, 10);
+    return result;
   }
+
+  protected startTimer(): void {
+    const elapsedTime: number = this.getElapsedTime();
+
+    this.generateTimer(true);
+    this.timerRunning = true;
+    this.currentCycleStartTime = Date.now();
+    this.threadTimer = this.getThreadTimer(elapsedTime);
+  }
+
   protected stopTimer(): void {
     this.timerRunning = false;
     clearInterval(this.threadTimer);
